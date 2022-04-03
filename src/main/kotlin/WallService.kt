@@ -4,7 +4,17 @@ import ru.netology.attachments.Attachment
 
 object WallService {
     private var posts = arrayListOf<Post>()
+    private var comments = arrayListOf<Comment>()
     private var postsID = 1
+
+    fun createComment(comment: Comment): Boolean {
+        for (post in posts) {
+            if (post.id == comment.postId) {
+                return comments.add(comment)
+            }
+        }
+        throw PostNotFoundException("Comment with id ${comment.postId} was not added")
+    }
 
     fun add(newPost: Post): Post {
         newPost.id = postsID
@@ -18,32 +28,21 @@ object WallService {
     }
 
     fun update(updatePost: Post): Boolean {
-        for (post in posts) {
+        for ((index, post) in posts.withIndex()) {
             if (post.id == updatePost.id) {
                 val newUpdatePost: Post = post.copy(
                     ownerId = updatePost.ownerId,
-                    fromId = updatePost.fromId,
-                    createdBy = updatePost.createdBy,
                     text = updatePost.text,
-                    replyOwnerId = updatePost.replyOwnerId,
-                    replyPostId = updatePost.replyPostId,
-                    friendsOnly = updatePost.friendsOnly,
                     comments = updatePost.comments,
                     likes = updatePost.likes,
                     views = updatePost.views,
                     postType = updatePost.postType,
                     signerId = updatePost.signerId,
-                    canPin = updatePost.canPin,
-                    canDelete = updatePost.canDelete,
-                    canEdit = updatePost.canEdit,
                     isPinned = updatePost.isPinned,
                     markedAsAds = updatePost.markedAsAds,
-                    isFavorite = updatePost.isFavorite,
-                    postponedId = updatePost.postponedId,
-                    attachments = updatePost.attachments
+                    isFavorite = updatePost.isFavorite
                 )
-                posts.remove(post)
-                posts += newUpdatePost
+                posts[index] = newUpdatePost
                 return true
             }
         }

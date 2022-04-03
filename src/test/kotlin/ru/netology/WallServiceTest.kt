@@ -214,4 +214,135 @@ class WallServiceTest {
         val result = service.update(update)
         assertFalse(result)
     }
+
+    @Test(expected = PostNotFoundException::class)
+    fun shouldThrow() {
+        WallService.add(
+            Post(
+                ownerId = 10,
+                fromId = 20,
+                createdBy = 30,
+                date = 0,
+                text = "This is the post",
+                replyOwnerId = 100,
+                replyPostId = 101,
+                friendsOnly = true,
+                comments = "comment",
+                likes = null,
+                views = null,
+                postType = "post",
+                signerId = 1,
+                canPin = true,
+                canDelete = true,
+                canEdit = true,
+                isPinned = true,
+                markedAsAds = true,
+                isFavorite = true,
+                postponedId = 0,
+                attachments = null
+            )
+        )
+        WallService.add(
+            Post(
+                ownerId = 100,
+                fromId = 20,
+                createdBy = 30,
+                date = 0,
+                text = "This is the post",
+                replyOwnerId = 100,
+                replyPostId = 101,
+                friendsOnly = true,
+                comments = "comment",
+                likes = null,
+                views = null,
+                postType = "post",
+                signerId = 1,
+                canPin = true,
+                canDelete = true,
+                canEdit = true,
+                isPinned = true,
+                markedAsAds = true,
+                isFavorite = true,
+                postponedId = 0,
+                attachments = null
+            )
+        )
+
+        WallService.createComment(
+            Comment(
+                ownerId = 0,
+                postId = 3,
+                fromGroup = 0,
+                message = "comment",
+                replyToComment = 0
+            )
+        )
+    }
+
+    @Test
+    fun shouldNotThrow() {
+        val service = WallService
+        service.add(
+            Post(
+                ownerId = 100,
+                fromId = 20,
+                createdBy = 30,
+                date = 0,
+                text = "This is the post",
+                replyOwnerId = 100,
+                replyPostId = 101,
+                friendsOnly = true,
+                comments = "comment",
+                likes = null,
+                views = null,
+                postType = "post",
+                signerId = 1,
+                canPin = true,
+                canDelete = true,
+                canEdit = true,
+                isPinned = true,
+                markedAsAds = true,
+                isFavorite = true,
+                postponedId = 0,
+                attachments = null
+            )
+        )
+        service.add(
+            Post(
+                ownerId = 101,
+                fromId = 20,
+                createdBy = 30,
+                date = 0,
+                text = "This is the post",
+                replyOwnerId = 100,
+                replyPostId = 101,
+                friendsOnly = true,
+                comments = "comment",
+                likes = null,
+                views = null,
+                postType = "post",
+                signerId = 1,
+                canPin = true,
+                canDelete = true,
+                canEdit = true,
+                isPinned = true,
+                markedAsAds = true,
+                isFavorite = true,
+                postponedId = 0,
+                attachments = null
+            )
+        )
+
+        val result = service.createComment(
+            Comment(
+                ownerId = 0,
+                postId = 1,
+                fromGroup = 0,
+                message = "comment",
+                replyToComment = 0
+            )
+        )
+        assertTrue(result)
+    }
 }
+
